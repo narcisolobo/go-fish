@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.dealCards = dealCards;
 exports.generateDeck = generateDeck;
 exports.shuffle = shuffle;
 /**
@@ -32,4 +33,17 @@ function shuffle(deck) {
         [result[i], result[j]] = [result[j], result[i]];
     }
     return result;
+}
+function dealCards(deck, players) {
+    const handSize = players.length === 2 ? 7 : 5;
+    const updatedPlayers = [];
+    const deckCopy = [...deck];
+    for (const player of players) {
+        const hand = deckCopy.splice(0, handSize);
+        updatedPlayers.push({ ...player, hand });
+    }
+    return {
+        updatedPlayers,
+        remainingDeck: deckCopy,
+    };
 }

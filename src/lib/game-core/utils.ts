@@ -1,4 +1,4 @@
-import type { Card, Rank, Suit } from './types';
+import type { Card, Player, Rank, Suit } from './types';
 
 /**
  * All four suits in a standard deck.
@@ -37,4 +37,23 @@ function shuffle(deck: Card[]): Card[] {
   return result;
 }
 
-export { generateDeck, shuffle };
+function dealCards(
+  deck: Card[],
+  players: Player[]
+): { updatedPlayers: Player[]; remainingDeck: Card[] } {
+  const handSize = players.length === 2 ? 7 : 5;
+  const updatedPlayers: Player[] = [];
+  const deckCopy = [...deck];
+
+  for (const player of players) {
+    const hand = deckCopy.splice(0, handSize);
+    updatedPlayers.push({ ...player, hand });
+  }
+
+  return {
+    updatedPlayers,
+    remainingDeck: deckCopy,
+  };
+}
+
+export { dealCards, generateDeck, shuffle };
