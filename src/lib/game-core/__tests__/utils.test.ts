@@ -1,4 +1,11 @@
-import { cardSorter, dealCards, generateDeck, hasBook, shuffle } from '../utils';
+import {
+  cardSorter,
+  dealCards,
+  generateDeck,
+  hasBook,
+  removeBooksFromHand,
+  shuffle,
+} from '../utils';
 import type { Card, Player } from '../types';
 
 describe('generateDeck', () => {
@@ -102,5 +109,49 @@ describe('hasBook', () => {
     ];
 
     expect(hasBook(hand)).toEqual([]);
+  });
+});
+
+describe('removeBooksFromHand', () => {
+  it('removes all cards of the given rank(s)', () => {
+    const hand: Card[] = [
+      { rank: '4', suit: 'hearts' },
+      { rank: '4', suit: 'clubs' },
+      { rank: '4', suit: 'diamonds' },
+      { rank: '4', suit: 'spades' },
+      { rank: '7', suit: 'hearts' },
+      { rank: 'Q', suit: 'clubs' },
+    ];
+
+    const newHand = removeBooksFromHand(hand, ['4']);
+
+    expect(newHand).toHaveLength(2);
+    expect(newHand.map((c) => c.rank)).toEqual(expect.arrayContaining(['7', 'Q']));
+  });
+
+  it('removes multiple ranks if specified', () => {
+    const hand: Card[] = [
+      { rank: '9', suit: 'hearts' },
+      { rank: '9', suit: 'clubs' },
+      { rank: 'K', suit: 'diamonds' },
+      { rank: 'K', suit: 'spades' },
+      { rank: 'A', suit: 'clubs' },
+    ];
+
+    const newHand = removeBooksFromHand(hand, ['9', 'K']);
+
+    expect(newHand).toEqual([{ rank: 'A', suit: 'clubs' }]);
+  });
+
+  it('returns the original hand if no books match', () => {
+    const hand: Card[] = [
+      { rank: '2', suit: 'hearts' },
+      { rank: '5', suit: 'spades' },
+    ];
+
+    const newHand = removeBooksFromHand(hand, ['Q']);
+
+    expect(newHand).toHaveLength(2);
+    expect(newHand).toEqual(hand);
   });
 });

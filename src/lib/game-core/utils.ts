@@ -78,6 +78,14 @@ function hasBook(hand: Card[]): Rank[] {
 }
 
 /**
+ * Returns a copy of the hand with all cards of the given ranks removed.
+ */
+function removeBooksFromHand(hand: Card[], books: Rank[]): Card[] {
+  const bookSet = new Set(books);
+  return hand.filter((card) => !bookSet.has(card.rank));
+}
+
+/**
  * Helper function for deterministic sorting of cards.
  */
 function cardSorter(a: Card, b: Card): number {
@@ -97,4 +105,4 @@ function suitOrder(suit: string): number {
   return order.indexOf(suit);
 }
 
-export { cardSorter, dealCards, generateDeck, hasBook, shuffle };
+export { cardSorter, dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle };

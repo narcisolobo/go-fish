@@ -4,6 +4,7 @@ exports.cardSorter = cardSorter;
 exports.dealCards = dealCards;
 exports.generateDeck = generateDeck;
 exports.hasBook = hasBook;
+exports.removeBooksFromHand = removeBooksFromHand;
 exports.shuffle = shuffle;
 /**
  * All four suits in a standard deck.
@@ -66,6 +67,13 @@ function hasBook(hand) {
     return Object.entries(countMap)
         .filter(([_, count]) => count === 4)
         .map(([rank]) => rank);
+}
+/**
+ * Returns a copy of the hand with all cards of the given ranks removed.
+ */
+function removeBooksFromHand(hand, books) {
+    const bookSet = new Set(books);
+    return hand.filter((card) => !bookSet.has(card.rank));
 }
 /**
  * Helper function for deterministic sorting of cards.
