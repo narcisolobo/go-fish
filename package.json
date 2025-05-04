@@ -10,10 +10,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --passWithNoTests",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "prepush": "pnpm lint && pnpm test && pnpm format"
+    "prepush": "pnpm lint && pnpm test && pnpm format",
+    "clean": "rm -rf dist",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test": "pnpm run clean && pnpm run build:test && jest dist"
   },
   "dependencies": {
     "next": "15.3.1",
