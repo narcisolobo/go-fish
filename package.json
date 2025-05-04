@@ -2,13 +2,16 @@
   "name": "go-fish",
   "version": "0.1.0",
   "private": true,
+  "author": "Narciso Lobo",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "echo \"(Placeholder) Add tests later\" && exit 0",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepush": "pnpm lint && pnpm test && pnpm format"
   },
   "dependencies": {
     "next": "15.3.1",
