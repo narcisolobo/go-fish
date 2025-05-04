@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isGameOver = isGameOver;
 exports.playTurn = playTurn;
 const utils_1 = require("./utils");
 /**
@@ -47,4 +48,11 @@ function playTurn(game, action) {
         booksCompleted: books,
         gameOver: false, // we'll add this later
     };
+}
+/**
+ * Returns true if all 13 books have been collected.
+ */
+function isGameOver(game) {
+    const totalBooks = game.players.reduce((sum, player) => sum + player.books.length, 0);
+    return totalBooks >= 13;
 }

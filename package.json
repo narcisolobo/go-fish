@@ -15,7 +15,7 @@
     "prepush": "pnpm lint && pnpm test && pnpm format",
     "clean": "rm -rf dist",
     "build:test": "tsc -p tsconfig.test.json",
-    "test": "pnpm run clean && pnpm run build:test && jest dist"
+    "test": "pnpm run clean && pnpm run build:test && jest dist --verbose"
   },
   "dependencies": {
     "next": "15.3.1",

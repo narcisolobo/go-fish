@@ -60,4 +60,12 @@ function playTurn(game: GameState, action: AskAction): TurnResult {
   };
 }
 
-export { playTurn };
+/**
+ * Returns true if all 13 books have been collected.
+ */
+function isGameOver(game: GameState): boolean {
+  const totalBooks = game.players.reduce((sum, player) => sum + player.books.length, 0);
+  return totalBooks >= 13;
+}
+
+export { isGameOver, playTurn };

@@ -98,6 +98,70 @@ describe('playTurn', () => {
                 break;
             case 'ask_success':
                 throw new Error('Expected ask_fail_fish, got ask_success');
+            default:
+                throw new Error('Unexpected result type');
         }
+    });
+    it('draws from deck and keeps the turn if the drawn card matches the requested rank (lucky fish)', () => {
+        const playerA = {
+            id: 'A',
+            name: 'Alice',
+            hand: [],
+            books: [],
+        };
+        const playerB = {
+            id: 'B',
+            name: 'Bob',
+            hand: [{ rank: '9', suit: 'diamonds' }],
+            books: [],
+        };
+        const game = {
+            players: [playerA, playerB],
+            deck: [{ rank: '5', suit: 'hearts' }],
+            currentPlayerIndex: 0,
+            log: [],
+        };
+        const result = (0, game_play_1.playTurn)(game, {
+            fromPlayerId: 'A',
+            toPlayerId: 'B',
+            rank: '5',
+        });
+        expect(result.type).toBe('ask_fail_fish');
+        switch (result.type) {
+            case 'ask_fail_fish':
+                expect(result.drewCard).toEqual({ rank: '5', suit: 'hearts' });
+                expect(game.currentPlayerIndex).toBe(0);
+                expect(game.players[0].hand).toContainEqual({ rank: '5', suit: 'hearts' });
+                break;
+            default:
+                throw new Error(`Unexpected result type: ${result.type}`);
+        }
+    });
+});
+describe('isGameOver', () => {
+    it('returns false if fewer than 13 books are completed', () => {
+        const game = {
+            players: [
+                { id: 'A', name: 'Alice', hand: [], books: ['2', '3'] },
+                { id: 'B', name: 'Bob', hand: [], books: ['7'] },
+            ],
+            deck: [],
+            currentPlayerIndex: 0,
+            log: [],
+        };
+        expect((0, game_play_1.isGameOver)(game)).toBe(false);
+    });
+    it('returns true if 13 or more books are completed', () => {
+        const books = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const game = {
+            players: [
+                { id: 'A', name: 'Alice', hand: [], books: books.slice(0, 7) },
+                { id: 'B', name: 'Bob', hand: [], books: books.slice(7) },
+            ],
+            deck: [],
+            currentPlayerIndex: 0,
+            log: [],
+        };
+        expect((0, game_play_1.isGameOver)(game)).toBe(true);
     });
 });
