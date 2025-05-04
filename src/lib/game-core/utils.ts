@@ -37,6 +37,11 @@ function shuffle(deck: Card[]): Card[] {
   return result;
 }
 
+/**
+ * Deals cards to players according to Go Fish rules.
+ * - 7 cards each for 2 players
+ * - 5 cards each for 3+ players
+ */
 function dealCards(
   deck: Card[],
   players: Player[]
@@ -56,4 +61,40 @@ function dealCards(
   };
 }
 
-export { dealCards, generateDeck, shuffle };
+/**
+ * Returns a list of ranks that appear exactly four times in a hand.
+ * These are considered "books" in Go Fish.
+ */
+function hasBook(hand: Card[]): Rank[] {
+  const countMap: Record<Rank, number> = {} as Record<Rank, number>;
+
+  for (const card of hand) {
+    countMap[card.rank] = (countMap[card.rank] || 0) + 1;
+  }
+
+  return Object.entries(countMap)
+    .filter(([_, count]) => count === 4)
+    .map(([rank]) => rank as Rank);
+}
+
+/**
+ * Helper function for deterministic sorting of cards.
+ */
+function cardSorter(a: Card, b: Card): number {
+  if (a.rank !== b.rank) {
+    return rankOrder(a.rank) - rankOrder(b.rank);
+  }
+  return suitOrder(a.suit) - suitOrder(b.suit);
+}
+
+function rankOrder(rank: string): number {
+  const order = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  return order.indexOf(rank);
+}
+
+function suitOrder(suit: string): number {
+  const order = ['clubs', 'diamonds', 'hearts', 'spades'];
+  return order.indexOf(suit);
+}
+
+export { cardSorter, dealCards, generateDeck, hasBook, shuffle };

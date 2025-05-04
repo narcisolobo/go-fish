@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cardSorter = cardSorter;
 exports.dealCards = dealCards;
 exports.generateDeck = generateDeck;
+exports.hasBook = hasBook;
 exports.shuffle = shuffle;
 /**
  * All four suits in a standard deck.
@@ -34,6 +36,11 @@ function shuffle(deck) {
     }
     return result;
 }
+/**
+ * Deals cards to players according to Go Fish rules.
+ * - 7 cards each for 2 players
+ * - 5 cards each for 3+ players
+ */
 function dealCards(deck, players) {
     const handSize = players.length === 2 ? 7 : 5;
     const updatedPlayers = [];
@@ -46,4 +53,34 @@ function dealCards(deck, players) {
         updatedPlayers,
         remainingDeck: deckCopy,
     };
+}
+/**
+ * Returns a list of ranks that appear exactly four times in a hand.
+ * These are considered "books" in Go Fish.
+ */
+function hasBook(hand) {
+    const countMap = {};
+    for (const card of hand) {
+        countMap[card.rank] = (countMap[card.rank] || 0) + 1;
+    }
+    return Object.entries(countMap)
+        .filter(([_, count]) => count === 4)
+        .map(([rank]) => rank);
+}
+/**
+ * Helper function for deterministic sorting of cards.
+ */
+function cardSorter(a, b) {
+    if (a.rank !== b.rank) {
+        return rankOrder(a.rank) - rankOrder(b.rank);
+    }
+    return suitOrder(a.suit) - suitOrder(b.suit);
+}
+function rankOrder(rank) {
+    const order = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+    return order.indexOf(rank);
+}
+function suitOrder(suit) {
+    const order = ['clubs', 'diamonds', 'hearts', 'spades'];
+    return order.indexOf(suit);
 }

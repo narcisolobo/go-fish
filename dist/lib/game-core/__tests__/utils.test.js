@@ -14,8 +14,8 @@ describe('shuffle', () => {
         const original = (0, utils_1.generateDeck)();
         const shuffled = (0, utils_1.shuffle)(original);
         expect(shuffled).toHaveLength(52);
-        const sortedOriginal = [...original].sort(cardSorter);
-        const sortedShuffled = [...shuffled].sort(cardSorter);
+        const sortedOriginal = [...original].sort(utils_1.cardSorter);
+        const sortedShuffled = [...shuffled].sort(utils_1.cardSorter);
         expect(sortedShuffled).toEqual(sortedOriginal);
     });
     it('likely changes card order', () => {
@@ -52,20 +52,37 @@ describe('dealCards', () => {
         expect(remainingDeck.length).toBe(deck.length - 15);
     });
 });
-/**
- * Helper function for deterministic sorting of cards.
- */
-function cardSorter(a, b) {
-    if (a.rank !== b.rank) {
-        return rankOrder(a.rank) - rankOrder(b.rank);
-    }
-    return suitOrder(a.suit) - suitOrder(b.suit);
-}
-function rankOrder(rank) {
-    const order = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-    return order.indexOf(rank);
-}
-function suitOrder(suit) {
-    const order = ['clubs', 'diamonds', 'hearts', 'spades'];
-    return order.indexOf(suit);
-}
+describe('hasBook', () => {
+    it('returns a list of ranks that appear exactly 4 times', () => {
+        const hand = [
+            { rank: '4', suit: 'hearts' },
+            { rank: '4', suit: 'diamonds' },
+            { rank: '4', suit: 'clubs' },
+            { rank: '4', suit: 'spades' },
+            { rank: 'A', suit: 'hearts' },
+        ];
+        expect((0, utils_1.hasBook)(hand)).toEqual(['4']);
+    });
+    it('returns multiple ranks if multiple books are present', () => {
+        const hand = [
+            { rank: '9', suit: 'hearts' },
+            { rank: '9', suit: 'clubs' },
+            { rank: '9', suit: 'spades' },
+            { rank: '9', suit: 'diamonds' },
+            { rank: 'K', suit: 'clubs' },
+            { rank: 'K', suit: 'hearts' },
+            { rank: 'K', suit: 'diamonds' },
+            { rank: 'K', suit: 'spades' },
+        ];
+        expect((0, utils_1.hasBook)(hand).sort()).toEqual(['9', 'K'].sort());
+    });
+    it('returns an empty array if no books are found', () => {
+        const hand = [
+            { rank: 'Q', suit: 'hearts' },
+            { rank: '5', suit: 'clubs' },
+            { rank: '2', suit: 'spades' },
+            { rank: '7', suit: 'diamonds' },
+        ];
+        expect((0, utils_1.hasBook)(hand)).toEqual([]);
+    });
+});

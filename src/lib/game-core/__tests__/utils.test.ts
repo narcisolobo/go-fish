@@ -1,4 +1,4 @@
-import { dealCards, generateDeck, shuffle } from '../utils';
+import { cardSorter, dealCards, generateDeck, hasBook, shuffle } from '../utils';
 import type { Card, Player } from '../types';
 
 describe('generateDeck', () => {
@@ -65,22 +65,42 @@ describe('dealCards', () => {
   });
 });
 
-/**
- * Helper function for deterministic sorting of cards.
- */
-function cardSorter(a: Card, b: Card): number {
-  if (a.rank !== b.rank) {
-    return rankOrder(a.rank) - rankOrder(b.rank);
-  }
-  return suitOrder(a.suit) - suitOrder(b.suit);
-}
+describe('hasBook', () => {
+  it('returns a list of ranks that appear exactly 4 times', () => {
+    const hand: Card[] = [
+      { rank: '4', suit: 'hearts' },
+      { rank: '4', suit: 'diamonds' },
+      { rank: '4', suit: 'clubs' },
+      { rank: '4', suit: 'spades' },
+      { rank: 'A', suit: 'hearts' },
+    ];
 
-function rankOrder(rank: string): number {
-  const order = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  return order.indexOf(rank);
-}
+    expect(hasBook(hand)).toEqual(['4']);
+  });
 
-function suitOrder(suit: string): number {
-  const order = ['clubs', 'diamonds', 'hearts', 'spades'];
-  return order.indexOf(suit);
-}
+  it('returns multiple ranks if multiple books are present', () => {
+    const hand: Card[] = [
+      { rank: '9', suit: 'hearts' },
+      { rank: '9', suit: 'clubs' },
+      { rank: '9', suit: 'spades' },
+      { rank: '9', suit: 'diamonds' },
+      { rank: 'K', suit: 'clubs' },
+      { rank: 'K', suit: 'hearts' },
+      { rank: 'K', suit: 'diamonds' },
+      { rank: 'K', suit: 'spades' },
+    ];
+
+    expect(hasBook(hand).sort()).toEqual(['9', 'K'].sort());
+  });
+
+  it('returns an empty array if no books are found', () => {
+    const hand: Card[] = [
+      { rank: 'Q', suit: 'hearts' },
+      { rank: '5', suit: 'clubs' },
+      { rank: '2', suit: 'spades' },
+      { rank: '7', suit: 'diamonds' },
+    ];
+
+    expect(hasBook(hand)).toEqual([]);
+  });
+});
