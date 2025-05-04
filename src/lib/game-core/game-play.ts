@@ -1,4 +1,4 @@
-import { AskAction, Card, GameState, TurnResult } from './types';
+import { AskAction, GameState, TurnResult } from './types';
 import { hasBook, removeBooksFromHand } from './utils';
 
 /**

@@ -105,4 +105,8 @@ function suitOrder(suit: string): number {
   return order.indexOf(suit);
 }
 
-export { cardSorter, dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle };
+function assertNever(x: never): never {
+  throw new Error(`Unexpected value: ${x}`);
+}
+
+export { assertNever, cardSorter, dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle };

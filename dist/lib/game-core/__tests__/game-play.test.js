@@ -91,12 +91,13 @@ describe('playTurn', () => {
             rank: '5',
         });
         expect(result.type).toBe('ask_fail_fish');
-        if (result.type === 'ask_fail_fish') {
-            expect(result.drewCard).toEqual({ rank: '3', suit: 'clubs' });
-            expect(game.currentPlayerIndex).toBe(1); // Turn passed
-        }
-        else {
-            throw new Error('Expected ask_fail_fish, got ask_success');
+        switch (result.type) {
+            case 'ask_fail_fish':
+                expect(result.drewCard).toEqual({ rank: '3', suit: 'clubs' });
+                expect(game.currentPlayerIndex).toBe(1);
+                break;
+            case 'ask_success':
+                throw new Error('Expected ask_fail_fish, got ask_success');
         }
     });
 });

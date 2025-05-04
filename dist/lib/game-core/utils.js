@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.assertNever = assertNever;
 exports.cardSorter = cardSorter;
 exports.dealCards = dealCards;
 exports.generateDeck = generateDeck;
@@ -91,4 +92,7 @@ function rankOrder(rank) {
 function suitOrder(suit) {
     const order = ['clubs', 'diamonds', 'hearts', 'spades'];
     return order.indexOf(suit);
+}
+function assertNever(x) {
+    throw new Error(`Unexpected value: ${x}`);
 }
