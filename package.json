@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "Narciso Lobo",
+  "description": "A browser-based game of Go Fish where users play against a computer opponent. Designed for casual play with clean visuals, smooth animations, and eventual support for up to 4-player multiplayer using WebSockets.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
