@@ -1,6 +1,5 @@
 import { playTurn } from '../game-play';
 import type { GameState, Player } from '../types';
-import { assertNever } from '../utils';
 
 describe('playTurn', () => {
   it('returns ask_success and transfers cards from target to asking player', () => {
