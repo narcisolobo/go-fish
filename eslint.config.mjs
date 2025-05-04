@@ -29,6 +29,7 @@ const eslintConfig = [
           argsIgnorePattern: '^_',
         },
       ],
+      'jest/no-conditional-expect': 'off',
     },
   },
 ];
