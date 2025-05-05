@@ -8,8 +8,12 @@
     "noEmit": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": ["src/lib/**/*"],
+  "include": ["src/lib/**/*", "src/cli/**/*"],
   "exclude": ["src/app", "node_modules"]
 }

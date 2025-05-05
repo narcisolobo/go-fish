@@ -1,11 +1,5 @@
-import {
-  cardSorter,
-  dealCards,
-  generateDeck,
-  hasBook,
-  removeBooksFromHand,
-  shuffle,
-} from '../utils';
+import { dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle } from '../utils';
+import { cardSorter } from '../helpers';
 import type { Card, Player } from '../types';
 
 describe('generateDeck', () => {

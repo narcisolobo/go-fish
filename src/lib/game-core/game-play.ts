@@ -1,3 +1,4 @@
+import { aOrAn, logEvent, rankNames } from './helpers';
 import { AskAction, GameState, TurnResult } from './types';
 import { hasBook, removeBooksFromHand } from './utils';
 
@@ -7,6 +8,7 @@ import { hasBook, removeBooksFromHand } from './utils';
  */
 function playTurn(game: GameState, action: AskAction): TurnResult {
   const { fromPlayerId, toPlayerId, rank } = action;
+  const pluralRank = rankNames.plural[rank];
 
   const fromPlayer = game.players.find((p) => p.id === fromPlayerId);
   const toPlayer = game.players.find((p) => p.id === toPlayerId);
@@ -27,10 +29,22 @@ function playTurn(game: GameState, action: AskAction): TurnResult {
     fromPlayer.books.push(...books);
     fromPlayer.hand = removeBooksFromHand(fromPlayer.hand, books);
 
+    logEvent(
+      game,
+      `${fromPlayer.name} asked ${toPlayer.name} for ${pluralRank}. ${toPlayer.name} had ${matchingCards.length}.`
+    );
+
+    if (books.length > 0) {
+      for (const b of books) {
+        const pluralBookRank = rankNames.plural[b];
+        logEvent(game, `${fromPlayer.name} completed a book of ${pluralBookRank}!`);
+      }
+    }
+
     return {
       type: 'ask_success',
       booksCompleted: books,
-      gameOver: false, // we'll calculate this later
+      gameOver: false,
     };
   }
 
@@ -52,11 +66,28 @@ function playTurn(game: GameState, action: AskAction): TurnResult {
     game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
   }
 
+  logEvent(
+    game,
+    `${fromPlayer.name} asked ${toPlayer.name} for ${pluralRank}. ${toPlayer.name} had none. Go fish!`
+  );
+
+  if (drewCard) {
+    const singularDrewCard = rankNames.singular[drewCard.rank];
+    logEvent(game, `${fromPlayer.name} drew ${aOrAn(drewCard.rank)} ${singularDrewCard}.`);
+  }
+
+  if (books.length > 0) {
+    for (const b of books) {
+      const pluralBookRank = rankNames.plural[b];
+      logEvent(game, `${fromPlayer.name} completed a book of ${pluralBookRank}!`);
+    }
+  }
+
   return {
     type: 'ask_fail_fish',
     drewCard,
     booksCompleted: books,
-    gameOver: false, // we'll add this later
+    gameOver: false,
   };
 }
 

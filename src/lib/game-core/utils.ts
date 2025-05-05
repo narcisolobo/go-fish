@@ -85,28 +85,4 @@ function removeBooksFromHand(hand: Card[], books: Rank[]): Card[] {
   return hand.filter((card) => !bookSet.has(card.rank));
 }
 
-/**
- * Helper function for deterministic sorting of cards.
- */
-function cardSorter(a: Card, b: Card): number {
-  if (a.rank !== b.rank) {
-    return rankOrder(a.rank) - rankOrder(b.rank);
-  }
-  return suitOrder(a.suit) - suitOrder(b.suit);
-}
-
-function rankOrder(rank: string): number {
-  const order = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  return order.indexOf(rank);
-}
-
-function suitOrder(suit: string): number {
-  const order = ['clubs', 'diamonds', 'hearts', 'spades'];
-  return order.indexOf(suit);
-}
-
-function assertNever(x: never): never {
-  throw new Error(`Unexpected value: ${x}`);
-}
-
-export { assertNever, cardSorter, dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle };
+export { dealCards, generateDeck, hasBook, removeBooksFromHand, shuffle };

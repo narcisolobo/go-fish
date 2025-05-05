@@ -191,3 +191,33 @@ describe('isGameOver', () => {
     expect(isGameOver(game)).toBe(true);
   });
 });
+
+describe('logEvent', () => {
+  it('adds logs for ask_success', () => {
+    const game: GameState = {
+      players: [
+        { id: 'A', name: 'Alice', hand: [], books: [] },
+        {
+          id: 'B',
+          name: 'Bob',
+          hand: [
+            { rank: 'Q', suit: 'hearts' },
+            { rank: 'Q', suit: 'clubs' },
+          ],
+          books: [],
+        },
+      ],
+      deck: [],
+      currentPlayerIndex: 0,
+      log: [],
+    };
+
+    playTurn(game, {
+      fromPlayerId: 'A',
+      toPlayerId: 'B',
+      rank: 'Q',
+    });
+
+    expect(game.log[0].text).toMatch(/Alice asked Bob for Queens/);
+  });
+});
