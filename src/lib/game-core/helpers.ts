@@ -1,4 +1,4 @@
-import type { Card, GameState, Rank } from './types';
+import type { Card, GameState } from './types';
 
 const rankNames = {
   singular: {
